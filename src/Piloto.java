@@ -39,7 +39,7 @@ public class Piloto  implements Comparable{
             if (paradas[i].getVuelta() == numVuelta) {
                 System.out.println("\uD83D\uDED1 Piloto: "+this.nombre+" entrando en PitLane");
                 this.timeEnd = this.timeEnd + paradas[i].getTimeParada();
-                System.out.println("Piloto: "+this.nombre+" salio del PitLane - Time PitLane: "+paradas[i].getTimeParada());
+                System.out.println("\uD83D\uDD27 Piloto: "+this.nombre+" salio del PitLane - Time PitLane: "+paradas[i].getTimeParada());
             }
         }
     }
