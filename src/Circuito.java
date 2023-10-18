@@ -8,13 +8,13 @@ public class Circuito {
     private Integer numeroVueltas = 75;
     private Integer numeroPilotos = 20;
 
-    private Integer capacidaPitLane = 5;
-    private Piloto[] pitLane;
+    private Integer capacidadPitLane = 5;
+    private Piloto[] pitLane = new Piloto[5];
 
     /************************* Constructores *************************/
-    public Circuito(List<Piloto> listaPilotos, Integer capacidaPitLane, Integer numeroVueltas) {
-        this.capacidaPitLane = capacidaPitLane;
-        this.pitLane = new Piloto[capacidaPitLane];
+    public Circuito(List<Piloto> listaPilotos, Integer capacidadPitLane, Integer numeroVueltas) {
+        this.capacidadPitLane = capacidadPitLane;
+        this.pitLane = new Piloto[capacidadPitLane];
         this.numeroVueltas = numeroVueltas;
         this.numeroPilotos = 20;
         this.listaPilotos = new LinkedList<Piloto>();
@@ -96,5 +96,21 @@ public class Circuito {
 
     public void setNumeroPilotos(Integer numeroPilotos) {
         this.numeroPilotos = numeroPilotos;
+    }
+
+    public Integer getCapacidadPitLane() {
+        return capacidadPitLane;
+    }
+
+    public void setCapacidadPitLane(Integer capacidadPitLane) {
+        this.capacidadPitLane = capacidadPitLane;
+    }
+
+    public Piloto[] getPitLane() {
+        return pitLane;
+    }
+
+    public void setPitLane(Piloto[] pitLane) {
+        this.pitLane = pitLane;
     }
 }
