@@ -89,7 +89,7 @@ public class Circuito {
         }
     }
 
-    /************************* Getter and Setter *************************/
+    /************************* Getter and Setter **************************/
 
     public List<Piloto> getListaPilotos() {
         return listaPilotos;
