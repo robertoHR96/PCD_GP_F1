@@ -1,7 +1,7 @@
 import java.util.Random;
 import java.util.SplittableRandom;
 
-public class Piloto  implements Comparable{
+public class Piloto implements Comparable {
     private String nombre;
 
     private ParadaPitLane[] paradas;
@@ -13,7 +13,7 @@ public class Piloto  implements Comparable{
     /************************* Constructores *************************/
     public Piloto(ParadaPitLane[] paradas, String nombre) {
         this.timeEnd = 0;
-        this.nombre=nombre;
+        this.nombre = nombre;
         this.vueltaActual = 0;
         this.paradas = new ParadaPitLane[5];
         for (int i = 0; i < 5; i++) {
@@ -25,28 +25,22 @@ public class Piloto  implements Comparable{
     public void recorrerVuelta(Integer numVuelta) {
         this.vueltaActual = numVuelta;
         // Se comprueba si hay una parada en el pitlane en esa vuelta
-        System.out.println("\uD83C\uDFCE\uFE0F Piloto: "+this.nombre+" recorriendo al vuelta: "+numVuelta);
-        comprobarSiParada(numVuelta);
+        System.out.println("\uD83C\uDFCE\uFE0F Piloto: " + this.nombre + " recorriendo al vuelta: " + numVuelta);
+        //comprobarSiParada(numVuelta);
         // Se añade el tiempo de la vuelta al timeEnd
         long timeOld = this.timeEnd;
         anadirTiempoVuelta();
         long timeNew = this.timeEnd;
-        System.out.println("\uD83C\uDFCE\uFE0F Piloto: "+this.nombre+" -> \uD83D\uDD53 termino la vuelta: "+numVuelta+" en: "+(timeNew - timeOld)+"s - tiempo total: "+timeEnd+"s");
+        System.out.println("\uD83C\uDFCE\uFE0F Piloto: " + this.nombre + " -> \uD83D\uDD53 termino la vuelta: " + numVuelta + " en: " + (timeNew - timeOld) + "s - tiempo total: " + timeEnd + "s");
     }
 
-    public void comprobarSiParada(Integer numVuelta) {
-        for (int i = 0; i < paradas.length; i++) {
-            if (paradas[i].getVuelta() == numVuelta) {
-                System.out.println("\uD83D\uDED1 Piloto: "+this.nombre+" entrando en PitLane");
-                this.timeEnd = this.timeEnd + paradas[i].getTimeParada();
-                System.out.println("Piloto: "+this.nombre+" salio del PitLane - Time PitLane: "+paradas[i].getTimeParada());
-            }
-        }
+    public void anadirPilotoPitLane(Piloto[] pitLane, int numerosPilotosPitLane) {
+        pitLane[numerosPilotosPitLane] = this;
     }
 
     public void anadirTiempoVuelta() {
         Random rdn = new Random();
-        long tiempoVuelta = (rdn.nextLong() % ( 350 - 200 - 1) + 200);
+        long tiempoVuelta = (rdn.nextLong() % (350 - 200 - 1) + 200);
         this.timeEnd = this.timeEnd + tiempoVuelta;
     }
 
@@ -94,6 +88,6 @@ public class Piloto  implements Comparable{
     @Override
     public int compareTo(Object o) {
         Piloto otroPiloto = (Piloto) o;
-        return Long.compare(this.timeEnd,  otroPiloto.timeEnd);
+        return Long.compare(this.timeEnd, otroPiloto.timeEnd);
     }
 }

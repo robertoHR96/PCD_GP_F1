@@ -8,16 +8,19 @@ public class Circuito {
     private Integer numeroVueltas = 75;
     private Integer numeroPilotos = 20;
 
-    private Integer capacidaPitLane = 5;
-    private Piloto[] pitLane;
+    private Integer capacidadPitLane = 5;
+    private Piloto [] pitLane = new Piloto[5];
+
+    private int numerosPilotosPitLane =0;
 
     /************************* Constructores *************************/
-    public Circuito(List<Piloto> listaPilotos, Integer capacidaPitLane, Integer numeroVueltas) {
-        this.capacidaPitLane = capacidaPitLane;
-        this.pitLane = new Piloto[capacidaPitLane];
+    public Circuito(List<Piloto> listaPilotos, Integer capacidadPitLane, Integer numeroVueltas) {
+        this.capacidadPitLane = capacidadPitLane;
+        this.pitLane = new Piloto[capacidadPitLane];
         this.numeroVueltas = numeroVueltas;
         this.numeroPilotos = 20;
         this.listaPilotos = new LinkedList<Piloto>();
+        this.numerosPilotosPitLane = 0;
         Iterator it = listaPilotos.iterator();
 
         int countMax = 0;
@@ -43,7 +46,31 @@ public class Circuito {
     public void recorrerCircuito(Piloto piloto) {
         for (int i = 0; i < numeroVueltas; i++) {
             piloto.recorrerVuelta(i);
+            comprobarSiParada(i, piloto);
         }
+    }
+
+    public void comprobarSiParada(Integer numVuelta, Piloto piloto) {
+        for (int i = 0; i < piloto.getParadas().length; i++) {
+            if (piloto.getParadas()[i].getVuelta() == numVuelta) {
+                System.out.println("\uD83D\uDED1 Piloto: " + piloto.getNombre() + " entrando en PitLane");
+                piloto.setTimeEnd(piloto.getTimeEnd() + piloto.getParadas()[i].getTimeParada());
+                anadirPilotoPitLane(piloto);
+                System.out.println("\uD83D\uDD27 Piloto: " + piloto.getNombre()+ " salio del PitLane - Time PitLane: " + piloto.getParadas()[i].getTimeParada());
+                sacarPilotoPitLane(piloto);
+            }
+        }
+    }
+    public void sacarPilotoPitLane(Piloto piloto) {
+        for (int i = 0; i < pitLane.length; i++) {
+            if ((this.pitLane[i] != null) && (this.pitLane[i].getNombre() == piloto.getNombre())) {
+                this.pitLane[i] = null;
+            }
+        }
+    }
+
+    public void anadirPilotoPitLane(Piloto piloto) {
+        this.pitLane[numerosPilotosPitLane] = piloto;
     }
 
     public void mostrarClasificacion() {
@@ -96,5 +123,21 @@ public class Circuito {
 
     public void setNumeroPilotos(Integer numeroPilotos) {
         this.numeroPilotos = numeroPilotos;
+    }
+
+    public Integer getCapacidadPitLane() {
+        return capacidadPitLane;
+    }
+
+    public void setCapacidadPitLane(Integer capacidadPitLane) {
+        this.capacidadPitLane = capacidadPitLane;
+    }
+
+    public Piloto[] getPitLane() {
+        return pitLane;
+    }
+
+    public void setPitLane(Piloto[] pitLane) {
+        this.pitLane = pitLane;
     }
 }
