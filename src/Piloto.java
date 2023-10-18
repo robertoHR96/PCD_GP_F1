@@ -31,6 +31,7 @@ public class Piloto implements Comparable {
         long timeOld = this.timeEnd;
         anadirTiempoVuelta();
         long timeNew = this.timeEnd;
+        //
         System.out.println("\uD83C\uDFCE\uFE0F Piloto: " + this.nombre + " -> \uD83D\uDD53 termino la vuelta: " + numVuelta + " en: " + (timeNew - timeOld) + "s - tiempo total: " + timeEnd + "s");
     }
 
