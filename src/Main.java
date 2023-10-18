@@ -14,20 +14,18 @@ public class Main {
         // Se crea el array de paradas
         ParadaPitLane[] paradasPiloto = {new ParadaPitLane(parada1), new ParadaPitLane(parada2), new ParadaPitLane(parada3), new ParadaPitLane(parada4), new ParadaPitLane(parada5)};
         // Se crean los pilotos
-        Piloto piloto1 = new Piloto(paradasPiloto, "Piloto 1");
-        Piloto piloto2 = new Piloto(paradasPiloto, "Piloto 2");
-        Piloto piloto3 = new Piloto(paradasPiloto, "Piloto 3");
+
         // Se añaden los pilotos a lista
-        LinkedList<Piloto> listaPilotos = new LinkedList<Piloto>();
-        listaPilotos.add(piloto1);
-        listaPilotos.add(piloto2);
-        listaPilotos.add(piloto3);
+
         // Se crea el circuito
-        Circuito circuito = new Circuito(listaPilotos, 5, 75);
+        Circuito circuito = new Circuito( 5, 31);
+        for (int i =0; i<20; i++){
+            circuito.anadirPiloto("piloto__"+i);
+        }
 
         // Se ejecuta la carrera
-        circuito.run();
-
+        circuito.recorrerCircuito();
+        circuito.mostrarClasificacion();
 
     }
 }

@@ -5,22 +5,23 @@ import java.util.Collections;
 
 public class Circuito {
     private List<Piloto> listaPilotos = new LinkedList<Piloto>();
-    private Integer numeroVueltas = 75;
     private Integer numeroPilotos = 20;
-
+    private Integer numeroVueltas = 75;
     private Integer capacidadPitLane = 5;
-    private Piloto [] pitLane = new Piloto[5];
+    private Piloto[] pitLane = new Piloto[5];
+    private int contadorIdsPilotos =0;
 
-    private int numerosPilotosPitLane =0;
+    private int numerosPilotosPitLane = 0;
 
     /************************* Constructores *************************/
-    public Circuito(List<Piloto> listaPilotos, Integer capacidadPitLane, Integer numeroVueltas) {
+    public Circuito( Integer capacidadPitLane, Integer numeroVueltas) {
         this.capacidadPitLane = capacidadPitLane;
         this.pitLane = new Piloto[capacidadPitLane];
-        this.numeroVueltas = numeroVueltas;
         this.numeroPilotos = 20;
         this.listaPilotos = new LinkedList<Piloto>();
         this.numerosPilotosPitLane = 0;
+        this.contadorIdsPilotos=1;
+        this.numeroVueltas=numeroVueltas;
         Iterator it = listaPilotos.iterator();
 
         int countMax = 0;
@@ -33,6 +34,7 @@ public class Circuito {
 
     /************************* Métodos propios*************************/
 
+    /*
     public void run() {
         Iterator it = this.listaPilotos.iterator();
         while (it.hasNext()) {
@@ -42,35 +44,26 @@ public class Circuito {
         mostrarClasificacion();
     }
 
-
-    public void recorrerCircuito(Piloto piloto) {
-        for (int i = 0; i < numeroVueltas; i++) {
-            piloto.recorrerVuelta(i);
-            comprobarSiParada(i, piloto);
+     */
+    public void recorrerCircuito() {
+        Thread[] vector = new Thread[numeroPilotos];
+        Iterator it = listaPilotos.iterator();
+        int cont = 0;
+        // hacemos que los pilotos comienzen la carrera
+        while (it.hasNext()) {
+            Runnable runnable = (Piloto) it.next();
+            vector[cont] = new Thread(runnable);
+            vector[cont].start();
+            cont++;
         }
-    }
+        // Finalizamos los pilotos
+        for(int i =0; i<numeroPilotos; i++){
+            try{
+            vector[i].join();
+            }catch (Exception e){
 
-    public void comprobarSiParada(Integer numVuelta, Piloto piloto) {
-        for (int i = 0; i < piloto.getParadas().length; i++) {
-            if (piloto.getParadas()[i].getVuelta() == numVuelta) {
-                System.out.println("\uD83D\uDED1 Piloto: " + piloto.getNombre() + " entrando en PitLane");
-                piloto.setTimeEnd(piloto.getTimeEnd() + piloto.getParadas()[i].getTimeParada());
-                anadirPilotoPitLane(piloto);
-                System.out.println("\uD83D\uDD27 Piloto: " + piloto.getNombre()+ " salio del PitLane - Time PitLane: " + piloto.getParadas()[i].getTimeParada());
-                sacarPilotoPitLane(piloto);
             }
         }
-    }
-    public void sacarPilotoPitLane(Piloto piloto) {
-        for (int i = 0; i < pitLane.length; i++) {
-            if ((this.pitLane[i] != null) && (this.pitLane[i].getNombre() == piloto.getNombre())) {
-                this.pitLane[i] = null;
-            }
-        }
-    }
-
-    public void anadirPilotoPitLane(Piloto piloto) {
-        this.pitLane[numerosPilotosPitLane] = piloto;
     }
 
     public void mostrarClasificacion() {
@@ -90,7 +83,28 @@ public class Circuito {
     }
 
     /************************* Getter and Setter *************************/
-
+    public void anadirPiloto(String nombre){
+        int parada1 = 21;
+        int parada2 = 22;
+        int parada3 = 23;
+        int parada4 = 24;
+        int parada5 = 25;
+        int parada6 = 26;
+        int parada7 = 27;
+        int parada8 = 28;
+        int parada9 = 29;
+        int parada10 = 30;
+        // Se crea el array de paradas
+        ParadaPitLane[] paradasPiloto = {
+                new ParadaPitLane(parada1), new ParadaPitLane(parada2),
+                new ParadaPitLane(parada3), new ParadaPitLane(parada4),
+                new ParadaPitLane(parada5), new ParadaPitLane(parada6),
+                new ParadaPitLane(parada7), new ParadaPitLane(parada8),
+                new ParadaPitLane(parada9), new ParadaPitLane(parada10),
+        };
+        Piloto pilot = new Piloto(paradasPiloto ,nombre, this.contadorIdsPilotos, this.numeroVueltas);
+        listaPilotos.add(pilot);
+    }
     public List<Piloto> getListaPilotos() {
         return listaPilotos;
     }
@@ -109,13 +123,7 @@ public class Circuito {
         this.listaPilotos.add(piloto);
     }
 
-    public Integer getNumeroVueltas() {
-        return numeroVueltas;
-    }
 
-    public void setNumeroVueltas(Integer numeroVueltas) {
-        this.numeroVueltas = numeroVueltas;
-    }
 
     public Integer getNumeroPilotos() {
         return numeroPilotos;
