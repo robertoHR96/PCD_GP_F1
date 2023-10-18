@@ -5,20 +5,11 @@ import java.util.LinkedList;
 public class Main {
     public static void main(String[] args) {
 
-        // paradas en las que se pararan los pilotos
-        int parada1 = 5;
-        int parada2 = 10;
-        int parada3 = 15;
-        int parada4 = 20;
-        int parada5 = 25;
-        // Se crea el array de paradas
-        ParadaPitLane[] paradasPiloto = {new ParadaPitLane(parada1), new ParadaPitLane(parada2), new ParadaPitLane(parada3), new ParadaPitLane(parada4), new ParadaPitLane(parada5)};
-        // Se crean los pilotos
 
-        // Se añaden los pilotos a lista
 
         // Se crea el circuito
-        Circuito circuito = new Circuito( 5, 31);
+        // y se añaden los pilotos:
+        Circuito circuito = new Circuito( 5, 75);
         for (int i =0; i<20; i++){
             circuito.anadirPiloto("piloto__"+i);
         }

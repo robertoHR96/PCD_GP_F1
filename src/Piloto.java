@@ -36,6 +36,7 @@ public class Piloto implements Comparable, Runnable {
     public void run() {
         for(int i =0; i<numeroVueltas; i++){
             recorrerVuelta(i);
+            // aqui es donde entra la sincronizacion ???
             comprobarSiParada(i);
         }
     }
@@ -45,8 +46,11 @@ public class Piloto implements Comparable, Runnable {
         System.out.println("\uD83C\uDFCE\uFE0F Piloto: " + this.nombre + " recorriendo al vuelta: " + numVuelta);
         //comprobarSiParada(numVuelta);
         // Se añade el tiempo de la vuelta al timeEnd
+        // se guarda el tiempo antes de calcular el tiempo de vuelta
         long timeOld = this.timeEnd;
+        // se le añade el teimpo de vuelta al piloto
         anadirTiempoVuelta();
+        // se obiten el tiempo nuevo
         long timeNew = this.timeEnd;
         // aqui emepiza lo secuencial
         System.out.println("\uD83C\uDFCE\uFE0F Piloto: " + this.nombre + " -> \uD83D\uDD53 termino la vuelta: " + numVuelta + " en: " + (timeNew - timeOld) + "s - tiempo total: " + timeEnd + "s");

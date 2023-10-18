@@ -34,17 +34,6 @@ public class Circuito {
 
     /************************* Métodos propios*************************/
 
-    /*
-    public void run() {
-        Iterator it = this.listaPilotos.iterator();
-        while (it.hasNext()) {
-            Piloto pilotoCorriendo = (Piloto) it.next();
-            recorrerCircuito(pilotoCorriendo);
-        }
-        mostrarClasificacion();
-    }
-
-     */
     public void recorrerCircuito() {
         Thread[] vector = new Thread[numeroPilotos];
         Iterator it = listaPilotos.iterator();
@@ -84,23 +73,17 @@ public class Circuito {
 
     /************************* Getter and Setter *************************/
     public void anadirPiloto(String nombre){
-        int parada1 = 21;
-        int parada2 = 22;
-        int parada3 = 23;
-        int parada4 = 24;
+        int parada1 = 5;
+        int parada2 = 10;
+        int parada3 = 15;
+        int parada4 = 20;
         int parada5 = 25;
-        int parada6 = 26;
-        int parada7 = 27;
-        int parada8 = 28;
-        int parada9 = 29;
-        int parada10 = 30;
+
         // Se crea el array de paradas
         ParadaPitLane[] paradasPiloto = {
                 new ParadaPitLane(parada1), new ParadaPitLane(parada2),
                 new ParadaPitLane(parada3), new ParadaPitLane(parada4),
-                new ParadaPitLane(parada5), new ParadaPitLane(parada6),
-                new ParadaPitLane(parada7), new ParadaPitLane(parada8),
-                new ParadaPitLane(parada9), new ParadaPitLane(parada10),
+                new ParadaPitLane(parada5),
         };
         Piloto pilot = new Piloto(paradasPiloto ,nombre, this.contadorIdsPilotos, this.numeroVueltas);
         listaPilotos.add(pilot);
@@ -122,8 +105,6 @@ public class Circuito {
     public void addPiloto(Piloto piloto) {
         this.listaPilotos.add(piloto);
     }
-
-
 
     public Integer getNumeroPilotos() {
         return numeroPilotos;
