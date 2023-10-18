@@ -9,7 +9,9 @@ public class Circuito {
     private Integer numeroPilotos = 20;
 
     private Integer capacidadPitLane = 5;
-    private Piloto[] pitLane = new Piloto[5];
+    private Piloto [] pitLane = new Piloto[5];
+
+    private int numerosPilotosPitLane =0;
 
     /************************* Constructores *************************/
     public Circuito(List<Piloto> listaPilotos, Integer capacidadPitLane, Integer numeroVueltas) {
@@ -18,6 +20,7 @@ public class Circuito {
         this.numeroVueltas = numeroVueltas;
         this.numeroPilotos = 20;
         this.listaPilotos = new LinkedList<Piloto>();
+        this.numerosPilotosPitLane = 0;
         Iterator it = listaPilotos.iterator();
 
         int countMax = 0;
@@ -43,7 +46,31 @@ public class Circuito {
     public void recorrerCircuito(Piloto piloto) {
         for (int i = 0; i < numeroVueltas; i++) {
             piloto.recorrerVuelta(i);
+            comprobarSiParada(i, piloto);
         }
+    }
+
+    public void comprobarSiParada(Integer numVuelta, Piloto piloto) {
+        for (int i = 0; i < piloto.getParadas().length; i++) {
+            if (piloto.getParadas()[i].getVuelta() == numVuelta) {
+                System.out.println("\uD83D\uDED1 Piloto: " + piloto.getNombre() + " entrando en PitLane");
+                piloto.setTimeEnd(piloto.getTimeEnd() + piloto.getParadas()[i].getTimeParada());
+                anadirPilotoPitLane(piloto);
+                System.out.println("\uD83D\uDD27 Piloto: " + piloto.getNombre()+ " salio del PitLane - Time PitLane: " + piloto.getParadas()[i].getTimeParada());
+                sacarPilotoPitLane(piloto);
+            }
+        }
+    }
+    public void sacarPilotoPitLane(Piloto piloto) {
+        for (int i = 0; i < pitLane.length; i++) {
+            if ((this.pitLane[i] != null) && (this.pitLane[i].getNombre() == piloto.getNombre())) {
+                this.pitLane[i] = null;
+            }
+        }
+    }
+
+    public void anadirPilotoPitLane(Piloto piloto) {
+        this.pitLane[numerosPilotosPitLane] = piloto;
     }
 
     public void mostrarClasificacion() {
