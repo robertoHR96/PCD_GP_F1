@@ -9,8 +9,9 @@ public class Main {
 
         // Se crea el circuito
         // y se añaden los pilotos:
-        Circuito circuito = new Circuito( 5, 75);
-        for (int i =0; i<20; i++){
+        Integer numPilotos=20;
+        Circuito circuito = new Circuito( 5, 10, numPilotos);
+        for (int i =0; i<numPilotos; i++){
             circuito.anadirPiloto("piloto__"+i);
         }
 

@@ -14,10 +14,10 @@ public class Circuito {
     private int numerosPilotosPitLane = 0;
 
     /************************* Constructores *************************/
-    public Circuito( Integer capacidadPitLane, Integer numeroVueltas) {
+    public Circuito( Integer capacidadPitLane, Integer numeroVueltas, Integer numeroPilotos) {
         this.capacidadPitLane = capacidadPitLane;
         this.pitLane = new Piloto[capacidadPitLane];
-        this.numeroPilotos = 20;
+        this.numeroPilotos = numeroPilotos;
         this.listaPilotos = new LinkedList<Piloto>();
         this.numerosPilotosPitLane = 0;
         this.contadorIdsPilotos=1;
@@ -74,10 +74,10 @@ public class Circuito {
     /************************* Getter and Setter *************************/
     public void anadirPiloto(String nombre){
         int parada1 = 5;
-        int parada2 = 10;
-        int parada3 = 15;
-        int parada4 = 20;
-        int parada5 = 25;
+        int parada2 = 6;
+        int parada3 = 7;
+        int parada4 = 8;
+        int parada5 = 9;
 
         // Se crea el array de paradas
         ParadaPitLane[] paradasPiloto = {
@@ -86,6 +86,7 @@ public class Circuito {
                 new ParadaPitLane(parada5),
         };
         Piloto pilot = new Piloto(paradasPiloto ,nombre, this.contadorIdsPilotos, this.numeroVueltas);
+        contadorIdsPilotos++;
         listaPilotos.add(pilot);
     }
     public List<Piloto> getListaPilotos() {

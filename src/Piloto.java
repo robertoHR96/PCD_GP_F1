@@ -3,7 +3,7 @@ import java.util.SplittableRandom;
 
 public class Piloto implements Comparable, Runnable {
 
-    private int id=0;
+    private int id = 0;
     private String nombre;
 
     private ParadaPitLane[] paradas;
@@ -14,14 +14,16 @@ public class Piloto implements Comparable, Runnable {
 
     private Integer numeroVueltas = 75;
 
-    private static Integer[] pitLane = new Integer [5];
+    private static Integer[] pitLane = new Integer[5];
     private static Integer numerosPilotosPitLane = 0;
+
+    private static Object object = new Object();
 
     /************************* Constructores *************************/
     public Piloto(ParadaPitLane[] paradas, String nombre, int id, int numeroVueltas) {
-        this.id=id;
+        this.id = id;
         this.timeEnd = 0;
-        this.numeroVueltas=numeroVueltas;
+        this.numeroVueltas = numeroVueltas;
         this.nombre = nombre;
         this.vueltaActual = 0;
         this.paradas = new ParadaPitLane[5];
@@ -34,12 +36,13 @@ public class Piloto implements Comparable, Runnable {
     /************************* Métodos propios*************************/
     @Override
     public void run() {
-        for(int i =0; i<numeroVueltas; i++){
+        for (int i = 0; i < numeroVueltas; i++) {
             recorrerVuelta(i);
             // aqui es donde entra la sincronizacion ???
             comprobarSiParada(i);
         }
     }
+
     public void recorrerVuelta(Integer numVuelta) {
         this.vueltaActual = numVuelta;
         // Se comprueba si hay una parada en el pitlane en esa vuelta
@@ -62,28 +65,53 @@ public class Piloto implements Comparable, Runnable {
         this.timeEnd = this.timeEnd + tiempoVuelta;
     }
 
-    public void comprobarSiParada(Integer numVuelta ) {
+    public void comprobarSiParada(Integer numVuelta) {
         for (int i = 0; i < this.paradas.length; i++) {
             if (this.paradas[i].getVuelta() == numVuelta) {
-                System.out.println("\uD83D\uDED1 Piloto: " + this.nombre + " entrando en PitLane");
-                this.timeEnd= this.timeEnd + this.paradas[i].getTimeParada();
-                anadirPilotoPitLane();
-                System.out.println("\uD83D\uDD27 Piloto: " + this.nombre + " salio del PitLane - Time PitLane: " + this.paradas[i].getTimeParada());
-                sacarPilotoPitLane();
+                this.timeEnd = this.timeEnd + this.paradas[i].getTimeParada();
+
+                synchronized (object) {
+                    while (numerosPilotosPitLane == 3) {
+                        try {
+                            System.out.println(" -----------------------");
+                            System.out.println(this.nombre + " esparando para entrar al pitlane: " + numerosPilotosPitLane);
+                            System.out.println(" -----------------------");
+                            object.wait();
+                        } catch (Exception e) {
+                        }
+                    }
+                    System.out.println("\uD83D\uDD27 Piloto: " + this.nombre + " entro al PitLane - Time PitLane: " + this.paradas[i].getTimeParada());
+                    anadirPilotoPitLane();
+                    try {
+                        Thread.sleep(1);
+                    } catch (Exception e) {
+                    }
+                    System.out.println("\uD83D\uDD27 Piloto: " + this.nombre + " salio del PitLane - Time PitLane: " + this.paradas[i].getTimeParada());
+                    sacarPilotoPitLane();
+                    object.notify();
+                }
+
             }
         }
     }
 
     public void sacarPilotoPitLane() {
+        numerosPilotosPitLane--;
         for (int i = 0; i < pitLane.length; i++) {
-            if ((this.pitLane[i] != null) && (this.pitLane[i] == this.id )) {
-                this.pitLane[i] = null;
+            if (this.pitLane[i] != null) {
+                if (this.pitLane[i] == this.id) {
+                    //this.pitLane[i] = null;
+                }
             }
         }
+
     }
 
     public void anadirPilotoPitLane() {
-        this.pitLane[numerosPilotosPitLane] = this.id;
+        System.out.println(this.id + " Numero pilotos pitLane antes : " + numerosPilotosPitLane);
+        //this.pitLane[numerosPilotosPitLane] = this.id;
+        numerosPilotosPitLane++;
+        System.out.println(this.id + " Numero pilotos pitLane despues : " + numerosPilotosPitLane);
     }
 
 
