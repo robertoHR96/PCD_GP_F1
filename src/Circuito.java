@@ -56,6 +56,9 @@ public class Circuito {
     }
 
     public void mostrarClasificacion() {
+        System.out.println("-------------------------------------------------------------");
+        System.out.println("---------------------- FIN DE LA CARRERA --------------------");
+        System.out.println("----------------------- CLASIFICACIONES ---------------------");
         String[] medallas = {"\uD83E\uDD47", "\uD83E\uDD48", "\uD83E\uDD49"};
         Collections.sort(listaPilotos);
         Iterator it = listaPilotos.iterator();
@@ -63,29 +66,21 @@ public class Circuito {
         while (it.hasNext()) {
             Piloto piloto = (Piloto) it.next();
             if (count <= 3) {
-                System.out.println(medallas[count - 1] + count.toString() + "ª posición -> Piloto:  " + piloto.getNombre() + ", Time : " + piloto.getTimeEnd());
+                System.out.println(medallas[count - 1]+"0"+ count.toString() + "ª posición -> Piloto:  " + piloto.getNombre() + ", Time : " + piloto.getTimeEnd());
             } else {
-                System.out.println(count.toString() + "ª posición -> Piloto:  " + piloto.getNombre() + ", Time : " + piloto.getTimeEnd());
+                if(count<10){
+                    System.out.println("- 0"+count.toString() + "ª posición -> Piloto:  " + piloto.getNombre() + ", Time : " + piloto.getTimeEnd());
+                }else{
+                    System.out.println("- "+count.toString() + "ª posición -> Piloto:  " + piloto.getNombre() + ", Time : " + piloto.getTimeEnd());
+                }
             }
             count++;
         }
     }
 
     /************************* Getter and Setter *************************/
-    public void anadirPiloto(String nombre){
-        int parada1 = 5;
-        int parada2 = 6;
-        int parada3 = 7;
-        int parada4 = 8;
-        int parada5 = 9;
-
-        // Se crea el array de paradas
-        ParadaPitLane[] paradasPiloto = {
-                new ParadaPitLane(parada1), new ParadaPitLane(parada2),
-                new ParadaPitLane(parada3), new ParadaPitLane(parada4),
-                new ParadaPitLane(parada5),
-        };
-        Piloto pilot = new Piloto(paradasPiloto ,nombre, this.contadorIdsPilotos, this.numeroVueltas);
+    public void anadirPiloto(String nombre, ParadaPitLane[] strategiaParadas){
+        Piloto pilot = new Piloto(strategiaParadas ,nombre, this.contadorIdsPilotos, this.numeroVueltas,this.capacidadPitLane);
         contadorIdsPilotos++;
         listaPilotos.add(pilot);
     }

@@ -5,28 +5,22 @@ public class Piloto implements Comparable, Runnable {
 
     private int id = 0;
     private String nombre;
-
     private ParadaPitLane[] paradas;
-
     private Integer vueltaActual = 0;
-
     private long timeEnd = 0;
-
     private Integer numeroVueltas = 75;
-
     private static Integer[] pitLane = new Integer[5];
     private static Integer numerosPilotosPitLane = 0;
-
     private static Object object = new Object();
 
     /************************* Constructores *************************/
-    public Piloto(ParadaPitLane[] paradas, String nombre, int id, int numeroVueltas) {
+    public Piloto(ParadaPitLane[] paradas, String nombre, int id, int numeroVueltas, int capacidadPitLane) {
         this.id = id;
         this.timeEnd = 0;
         this.numeroVueltas = numeroVueltas;
         this.nombre = nombre;
         this.vueltaActual = 0;
-        this.paradas = new ParadaPitLane[5];
+        this.paradas = new ParadaPitLane[capacidadPitLane];
         numerosPilotosPitLane = 0;
         for (int i = 0; i < 5; i++) {
             this.paradas[i] = paradas[i];
@@ -46,7 +40,7 @@ public class Piloto implements Comparable, Runnable {
     public void recorrerVuelta(Integer numVuelta) {
         this.vueltaActual = numVuelta;
         // Se comprueba si hay una parada en el pitlane en esa vuelta
-        System.out.println("\uD83C\uDFCE\uFE0F Piloto: " + this.nombre + " recorriendo al vuelta: " + numVuelta);
+        System.out.println(" ----------------------\n \uD83C\uDFCE\uFE0F "+ this.nombre + "\n recorriendo al vuelta: " + numVuelta);
         //comprobarSiParada(numVuelta);
         // Se añade el tiempo de la vuelta al timeEnd
         // se guarda el tiempo antes de calcular el tiempo de vuelta
@@ -56,7 +50,7 @@ public class Piloto implements Comparable, Runnable {
         // se obiten el tiempo nuevo
         long timeNew = this.timeEnd;
         // aqui emepiza lo secuencial
-        System.out.println("\uD83C\uDFCE\uFE0F Piloto: " + this.nombre + " -> \uD83D\uDD53 termino la vuelta: " + numVuelta + " en: " + (timeNew - timeOld) + "s - tiempo total: " + timeEnd + "s");
+        System.out.println(" ----------------------\n \uD83C\uDFCE\uFE0F " + this.nombre + "\n \uD83D\uDD53 termino la vuelta: " + numVuelta + " en: " + (timeNew - timeOld) + "s\n tiempo total: " + timeEnd + "s ");
     }
 
     public void anadirTiempoVuelta() {
@@ -69,38 +63,37 @@ public class Piloto implements Comparable, Runnable {
         for (int i = 0; i < this.paradas.length; i++) {
             if (this.paradas[i].getVuelta() == numVuelta) {
                 this.timeEnd = this.timeEnd + this.paradas[i].getTimeParada();
-
+                // para la entrada
                 synchronized (object) {
-                    while (numerosPilotosPitLane == 3) {
+                    while(numerosPilotosPitLane == pitLane.length) {
                         try {
-                            System.out.println(" -----------------------");
-                            System.out.println(this.nombre + " esparando para entrar al pitlane: " + numerosPilotosPitLane);
-                            System.out.println(" -----------------------");
+                            System.out.println(" -----------------------\n \uD83D\uDED1 " + this.nombre + " esperando para entrar en el pitlane ");
                             object.wait();
                         } catch (Exception e) {
                         }
                     }
-                    System.out.println("\uD83D\uDD27 Piloto: " + this.nombre + " entro al PitLane - Time PitLane: " + this.paradas[i].getTimeParada());
                     anadirPilotoPitLane();
-                    try {
-                        Thread.sleep(1);
-                    } catch (Exception e) {
-                    }
-                    System.out.println("\uD83D\uDD27 Piloto: " + this.nombre + " salio del PitLane - Time PitLane: " + this.paradas[i].getTimeParada());
+                    System.out.println(" ----------------------\n \uD83D\uDD27 Piloto: " + this.nombre + " entro al PitLane\n Numero pilotos en PitLane despues entrada: "+numerosPilotosPitLane);
+                }
+                // tiempo espera en el pitlane
+                try { Thread.sleep(300); } catch (Exception e) {}
+                // sincronizacion de la salida
+                synchronized (object){
                     sacarPilotoPitLane();
+                    System.out.println("----------------------\n \uD83D\uDD27 Piloto: " + this.nombre + " salio del PitLane \n \uD83D\uDD53 Time PitLane: " + this.paradas[i].getTimeParada()+ "\n Numero pilotos en PitLane despues salida: "+numerosPilotosPitLane);
                     object.notify();
                 }
-
             }
         }
     }
 
     public void sacarPilotoPitLane() {
-        numerosPilotosPitLane--;
         for (int i = 0; i < pitLane.length; i++) {
             if (this.pitLane[i] != null) {
                 if (this.pitLane[i] == this.id) {
-                    //this.pitLane[i] = null;
+                    this.pitLane[i] = null;
+                    numerosPilotosPitLane--;
+                    break;
                 }
             }
         }
@@ -108,10 +101,13 @@ public class Piloto implements Comparable, Runnable {
     }
 
     public void anadirPilotoPitLane() {
-        System.out.println(this.id + " Numero pilotos pitLane antes : " + numerosPilotosPitLane);
-        //this.pitLane[numerosPilotosPitLane] = this.id;
-        numerosPilotosPitLane++;
-        System.out.println(this.id + " Numero pilotos pitLane despues : " + numerosPilotosPitLane);
+        for (int i = 0; i < pitLane.length; i++) {
+            if (pitLane[i] == null) {
+                this.pitLane[i] = this.id;
+                numerosPilotosPitLane++;
+                break;
+            }
+        }
     }
 
 
