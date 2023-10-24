@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.*;
+
 /**
  * La clase Circuito representa un circuito de carreras con pilotos y un pit lane.
  */
@@ -92,9 +93,8 @@ public class Circuito {
             if (piloto.getParadas()[i].getVuelta() == numVuelta) {
                 System.out.println("\uD83D\uDED1 Piloto: " + piloto.getNombre() + " entrando en PitLane");
                 piloto.setTimeEnd(piloto.getTimeEnd() + piloto.getParadas()[i].getTimeParada());
-                anadirPilotoPitLane(piloto);
-                System.out.println("\uD83D\uDD27 Piloto: " + piloto.getNombre() + " salió del PitLane - Time PitLane: " + piloto.getParadas()[i].getTimeParada());
-                sacarPilotoPitLane(piloto);
+                anadirPilotoPitLane(piloto, i);
+
             }
         }
     }
@@ -113,12 +113,20 @@ public class Circuito {
     }
 
     /**
-     * Añade un piloto al pit lane.
+     * Añade un piloto al pit lane si este tiene huecos.
      *
      * @param piloto El piloto a añadir al pit lane.
      */
-    public void anadirPilotoPitLane(Piloto piloto) {
-        this.pitLane[numerosPilotosPitLane] = piloto;
+    public void anadirPilotoPitLane(Piloto piloto, int numParada) {
+        try {
+            this.pitLane[numerosPilotosPitLane] = piloto;
+            numerosPilotosPitLane++;
+            System.out.println("\uD83D\uDD27 Piloto: " + piloto.getNombre() + " salió del PitLane - Time PitLane: " + piloto.getParadas()[numParada].getTimeParada());
+        } catch (Exception e) {
+            System.out.println("------------------------------------------");
+            System.out.println("Pitlane lleno no pueden entrar mas pilotos");
+            System.out.println("------------------------------------------");
+        }
     }
 
     /**
