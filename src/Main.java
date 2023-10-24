@@ -1,8 +1,14 @@
 import java.util.LinkedList;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+/**
+ * La clase Main es la clase principal que contiene el método main para ejecutar el programa.
+ */
 public class Main {
+    /**
+     * El método main es el punto de entrada del programa.
+     *
+     * @param args Los argumentos de la línea de comandos (no se utilizan en este programa).
+     */
     public static void main(String[] args) {
 
         // lista de estrategias
