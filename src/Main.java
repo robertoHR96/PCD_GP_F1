@@ -1,7 +1,7 @@
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
-
+import java.util.Random;
 /**
  * La clase Main es la clase principal que contiene el método main para ejecutar el programa.
  */
@@ -57,7 +57,7 @@ public class Main {
 
         // Se crea el circuito
         // y se añaden los pilotos:
-        Integer numPilotos = 20;
+        Integer numPilotos = 6;
         Circuito circuito = new Circuito(5, 75, numPilotos);
         introducirNumeroVueltas(circuito);
         int estrategia = 0;
@@ -76,7 +76,7 @@ public class Main {
      * Añade un piloto a la carrera
      * @return Piloto El piloto añadido a la carrera
      */
-    public static Piloto añadirPiloto(Circuito circuito, LinkedList<ParadaPitLane[]> listaEstrategias) {
+    public static void añadirPiloto(Circuito circuito, LinkedList<ParadaPitLane[]> listaEstrategias) {
         String nombrePiloto;
         String elegirEztrategia;
         Scanner reader = new Scanner(System.in);
@@ -105,14 +105,35 @@ public class Main {
         // Si seleciona s, se ejecuta seleccionarEstrategiaPersonalizada para que selecione una de las pre-cargadas
         if(elegirEztrategia.equals("s")) {
             ParadaPitLane[] estrategiaPersonalizada = seleccionarEstrategiaPersonalizada(listaEstrategias);
+            circuito.anadirPiloto( nombrePiloto, estrategiaPersonalizada);
         }else{
         // Si selecciona n, se eleige una aleatoria
+            ParadaPitLane[] estrategiaPersonalizada = seleccionarEstrategiaAleatoria(listaEstrategias);
+            circuito.anadirPiloto( nombrePiloto, estrategiaPersonalizada);
         }
-        return new Piloto();
     }
 
     /**
+     * Devuelve una strategia de paradas en el pit-lane aletoria para el piloto
+     * @param listaEstrategias Lista de estragias de paradas opcionales
+     * @return ParadaPitlane[] Estrategia de paradas personalizada
+     */
+    public static ParadaPitLane [] seleccionarEstrategiaAleatoria(LinkedList<ParadaPitLane []> listaEstrategias){
+        // Crear una instancia de la clase Random
+        Random random = new Random();
+
+        // Generar un número aleatorio entre 0 y 2 (incluyendo 0 pero excluyendo 3)
+        int numeroAleatorio = random.nextInt(3);
+        // se le suma uno para la muestra de estrategia
+        numeroAleatorio++;
+        System.out.println("--- Estrageia auto-seleccionada ---");
+        mostrarParadas(listaEstrategias.get(numeroAleatorio-1), numeroAleatorio);
+        // se le pasa el numero menos uno para que conincida
+        return listaEstrategias.get(numeroAleatorio-1);
+    }
+    /**
      * Devuelve una estrategia de paradas en el pit-lane "personaliza" para el piloto
+     * @param listaEstrategias Lista de estragias de paradas opcionales
      * @return ParadaPitlane[] Estrategia de paradas personalizada
      */
     public static ParadaPitLane [] seleccionarEstrategiaPersonalizada(LinkedList<ParadaPitLane[]> listaEstrategias){
@@ -121,7 +142,7 @@ public class Main {
         // Se muestran todas las estrategias
         while (it.hasNext()){
             ParadaPitLane [] paradasPit = (ParadaPitLane[]) it.next();
-            mostrarParadas(paradasPit, cont);
+            mostrarParadas(paradasPit, cont+1);
             cont++;
         }
         Scanner reader = new Scanner(System.in);
@@ -132,11 +153,12 @@ public class Main {
                 // Se pregunta que estrategia quiere
                 System.out.println("Introducca el ID de la estrategia seleccionada : ");
                 int idEstrategia = reader.nextInt();
+                idEstrategia--;
                 // Se comprueba que el id-estrateia es valido
-                if(idEstrategia<0 && idEstrategia<listaEstrategias.size()){
-                    System.out.println("Estrategia: "+idEstrategia+" seleccionada correctamente");
+                if(idEstrategia<0 || idEstrategia<listaEstrategias.size()){
+                    System.out.println("Estrategia: "+(idEstrategia + 1)+" seleccionada correctamente");
                     ok = true;
-                    return listaEstrategias(idEstrategia);
+                    return listaEstrategias.get(idEstrategia);
                 }else{
                     // Se le dice al usuario que el id-estrategia no es valido
                     System.out.println("Id-estragia no valido");
@@ -156,11 +178,12 @@ public class Main {
      * @param contadorEstrategias Numero de estrategia
      */
     public static void mostrarParadas(ParadaPitLane[] paradasPit, int contadorEstrategias){
-        System.out.println("-------- Estrategia :"+contadorEstrategias+" --------");
+        System.out.println("--------------- Estrategia :"+contadorEstrategias+" ---------------");
         for(int i = 0; i< paradasPit.length; i++){
-            System.out.print(paradasPit[i]+ " ");
+            System.out.print("Vuelta : "+paradasPit[i].getVuelta()+ " ");
         }
-        System.out.println("------------------------------");
+        System.out.println("");
+        System.out.println("----------------------------------------------------");
     }
 
     /**
