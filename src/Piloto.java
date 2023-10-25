@@ -50,11 +50,11 @@ public class Piloto implements Comparable {
      */
     public void recorrerVuelta(Integer numVuelta) {
         this.vueltaActual = numVuelta;
-        System.out.println("\uD83C\uDFCE\uFE0F Piloto: " + this.nombre + " recorriendo la vuelta: " + numVuelta);
+        //System.out.println("\uD83C\uDFCE\uFE0F Piloto: " + this.nombre + " recorriendo la vuelta: " + numVuelta);
         long timeOld = this.timeEnd;
         anadirTiempoVuelta();
         long timeNew = this.timeEnd;
-        System.out.println("\uD83C\uDFCE\uFE0F Piloto: " + this.nombre + " -> \uD83D\uDD53 terminó la vuelta: " + numVuelta + " en: " + (timeNew - timeOld) + "s - tiempo total: " + timeEnd + "s");
+        //System.out.println("\uD83C\uDFCE\uFE0F Piloto: " + this.nombre + " -> \uD83D\uDD53 terminó la vuelta: " + numVuelta + " en: " + (timeNew - timeOld) + "s - tiempo total: " + timeEnd + "s");
     }
 
     /**

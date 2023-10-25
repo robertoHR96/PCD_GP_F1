@@ -16,7 +16,7 @@ public class Main {
         int parada2 = 10;
         int parada3 = 15;
         int parada4 = 20;
-        int parada5 = 25;
+        int parada5 = 25; // 5 paradas entre las 0 y 60 y que sean aletorias
 
         // Se crea el array de paradas
         ParadaPitLane[] paradasPiloto = {
