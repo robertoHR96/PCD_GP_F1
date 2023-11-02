@@ -1,6 +1,7 @@
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 
 /**
  * La clase Piloto representa a un piloto de carreras en el circuito.
@@ -12,10 +13,14 @@ public class Piloto implements Comparable, Runnable {
     private ParadaPitLane[] paradas; // Paradas en el pit lane que realizará el piloto.
     private Integer vueltaActual = 0; // Número de la vuelta actual.
     private long timeEnd = 0; // Tiempo total de finalización de la carrera en segundos.
+    private long timePitLane = 0; // Tiempo total de finalización de la carrera en segundos.
     private Integer numeroVueltas = 75; // Número total de vueltas de la carrera.
     private static Integer[] pitLane = new Integer[5]; // Representa el pit lane.
     private static Integer numerosPilotosPitLane = 0; // Número de pilotos en el pit lane.
     private static Object object = new Object(); // Objeto de sincronización para el pit lane.
+    private Semaphore semaforoCola = new Semaphore(1);
+    private Semaphore semaforoCola2 = new Semaphore(1);
+    private Semaphore mutex;
 
     /**
      * Constructor de la clase Piloto.
@@ -33,6 +38,10 @@ public class Piloto implements Comparable, Runnable {
         this.nombre = nombre;
         this.vueltaActual = 0;
         this.paradas = new ParadaPitLane[capacidadPitLane];
+
+        this.semaforoCola = new Semaphore(1);
+        this.semaforoCola2 = new Semaphore(1);
+        this.mutex = new Semaphore(1);
         numerosPilotosPitLane = 0;
         for (int i = 0; i < 5; i++) {
             this.paradas[i] = paradas[i];
@@ -80,29 +89,38 @@ public class Piloto implements Comparable, Runnable {
      * @param numVuelta El número de la vuelta actual.
      */
     public void comprobarSiParada(Integer numVuelta) {
+        long tiempoEsperaInicio;
         for (int i = 0; i < this.paradas.length; i++) {
             if (this.paradas[i].getVuelta() == numVuelta) {
-                this.timeEnd = this.timeEnd + this.paradas[i].getTimeParada();
-                synchronized (object) {
-                    while (numerosPilotosPitLane == pitLane.length) {
-                        try {
-                            System.out.println(" -----------------------\n \uD83D\uDED1 " + this.nombre + " esperando para entrar en el pit lane ");
-                            object.wait();
-                        } catch (Exception e) {
-                        }
-                    }
-                    anadirPilotoPitLane();
-                    System.out.println(" ----------------------\n \uD83D\uDD27 Piloto: " + this.nombre + " entró al Pit Lane\n Numero de pilotos en Pit Lane después de la entrada: " + numerosPilotosPitLane);
-                }
+                tiempoEsperaInicio = System.currentTimeMillis();
                 try {
-                    // Simula no el tiempo de espera dentro del pitlane sino el tiempo desde de entrada a a este
-                    Thread.sleep(300);
-                } catch (Exception e) {
-                }
-                synchronized (object) {
+                    if (numerosPilotosPitLane == 5) {
+                        System.out.println(" -----------------------\n \uD83D\uDED1 " + this.nombre + " esperando para entrar en el pit lane");
+                        semaforoCola.acquire();
+                    }
+                    mutex.acquire();
+                    anadirPilotoPitLane();
+                    mutex.release();
+                    System.out.println(" ----------------------\n \uD83D\uDD27 Piloto: " + this.nombre + " entró al Pit Lane\n Numero de pilotos en Pit Lane despues de la entrada: " + numerosPilotosPitLane);
+                    try {
+                        // Simula el tiempo de espera dentro del pitlane
+                        Thread.sleep(300);
+                    } catch (Exception e) {
+                    }
+                    semaforoCola2.acquire();
                     sacarPilotoPitLane();
-                    System.out.println("----------------------\n \uD83D\uDD27 Piloto: " + this.nombre + " salió del Pit Lane \n \uD83D\uDD53 Tiempo en el Pit Lane: " + this.paradas[i].getTimeParada() + "\n Numero de pilotos en el Pit Lane después de la salida: " + numerosPilotosPitLane);
-                    object.notify();
+                    semaforoCola2.release();
+                    semaforoCola.release();
+
+                    long tiempoEsperaFin = System.currentTimeMillis();
+                    long tiempoDeParada = (tiempoEsperaFin - tiempoEsperaInicio);
+                    // se modifica el tiempo de pitlane total
+                    this.timePitLane = this.timePitLane + tiempoDeParada;
+                    System.out.println("----------------------\n \uD83D\uDD27 Piloto: " + this.nombre + " salió del Pit Lane \n \uD83D\uDD53 Tiempo en el Pit Lane: " + tiempoDeParada + "\n Numero de pilotos en el Pit Lane después de la salida: " + numerosPilotosPitLane);
+                    // Deja libre un hueco en el semaforo de cola
+                    //object.notify();
+                } catch (Exception e) {
+                    System.out.println("Error 2");
                 }
             }
         }
@@ -218,6 +236,14 @@ public class Piloto implements Comparable, Runnable {
      */
     public void setTimeEnd(long timeEnd) {
         this.timeEnd = timeEnd;
+    }
+
+    public long getTimePitLane() {
+        return timePitLane;
+    }
+
+    public void setTimePitLane(long timePitLane) {
+        this.timePitLane = timePitLane;
     }
 
     /**

@@ -72,13 +72,14 @@ public class Circuito {
         Integer count = 1;
         while (it.hasNext()) {
             Piloto piloto = (Piloto) it.next();
+            long tiempoTotal = (piloto.getTimeEnd() + piloto.getTimePitLane());
             if (count <= 3) {
-                System.out.println(medallas[count - 1] + "0" + count.toString() + "ª posición -> Piloto:  " + piloto.getNombre() + ", Time : " + piloto.getTimeEnd());
+                System.out.println(medallas[count - 1] + "0" + count.toString() + "ª posición -> Piloto:  " + piloto.getNombre() + ", Time : " + piloto.getTimeEnd() + ", Tiempo en pit-lane"+ piloto.getTimePitLane() + ", Tiempo de parada total: "+ tiempoTotal);
             } else {
                 if (count < 10) {
-                    System.out.println("- 0" + count.toString() + "ª posición -> Piloto:  " + piloto.getNombre() + ", Time : " + piloto.getTimeEnd());
+                    System.out.println("- 0" + count.toString() + "ª posición -> Piloto:  " + piloto.getNombre() + ", Time : " + piloto.getTimeEnd() + ", Tiempo en pit-lane"+ piloto.getTimePitLane() + ", Tiempo de parada total: "+ tiempoTotal);
                 } else {
-                    System.out.println("- " + count.toString() + "ª posición -> Piloto:  " + piloto.getNombre() + ", Time : " + piloto.getTimeEnd());
+                    System.out.println("- " + count.toString() + "ª posición -> Piloto:  " + piloto.getNombre() + ", Time : " + piloto.getTimeEnd() + ", Tiempo en pit-lane"+ piloto.getTimePitLane() + ", Tiempo de parada total: "+ tiempoTotal);
                 }
             }
             count++;
