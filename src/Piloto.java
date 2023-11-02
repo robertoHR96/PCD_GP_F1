@@ -112,8 +112,6 @@ public class Piloto implements Comparable, Runnable {
                     mutex.acquire();
                     sacarPilotoPitLane();
 
-                    //semaforoLlenos.release();
-
                     long tiempoEsperaFin = System.currentTimeMillis();
                     long tiempoDeParada = (tiempoEsperaFin - tiempoEsperaInicio);
                     // se modifica el tiempo de pitlane total
