@@ -57,11 +57,12 @@ public class Piloto implements Comparable, Runnable {
      */
     public void recorrerVuelta(Integer numVuelta) {
         this.vueltaActual = numVuelta;
-        System.out.println(" ----------------------\n \uD83C\uDFCE\uFE0F " + this.nombre + "\n recorriendo la vuelta: " + numVuelta);
+        //System.out.println(" ----------------------\n \uD83C\uDFCE\uFE0F " + this.nombre + "\n recorriendo la vuelta: " + numVuelta);
         long timeOld = this.timeEnd;
         anadirTiempoVuelta();
         long timeNew = this.timeEnd;
-        System.out.println(" ----------------------\n \uD83C\uDFCE\uFE0F " + this.nombre + "\n \uD83D\uDD53 terminó la vuelta: " + numVuelta + " en: " + (timeNew - timeOld) + "s\n tiempo total: " + timeEnd + "s ");
+        //System.out.println(" ----------------------\n \uD83C\uDFCE\uFE0F " + this.nombre + "\n \uD83D\uDD53 terminó la vuelta: " + numVuelta + " en: " + (timeNew - timeOld) + "s\n tiempo total: " + timeEnd + "s ");
+
     }
 
     /**
@@ -94,6 +95,7 @@ public class Piloto implements Comparable, Runnable {
                     System.out.println(" ----------------------\n \uD83D\uDD27 Piloto: " + this.nombre + " entró al Pit Lane\n Numero de pilotos en Pit Lane después de la entrada: " + numerosPilotosPitLane);
                 }
                 try {
+                    // Simula no el tiempo de espera dentro del pitlane sino el tiempo desde de entrada a a este
                     Thread.sleep(300);
                 } catch (Exception e) {
                 }
